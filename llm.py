@@ -117,8 +117,8 @@ async def complete(system: str, user: str) -> str:
         try:
             return await _gemini_call(attempt_model, system, user)
         except httpx.HTTPStatusError as e:
-            # 429 = rate-limited, 5xx = transient — try fallback
-            if e.response.status_code in (429, 500, 502, 503, 504):
+            # 404 = model not found, 429 = rate-limited, 5xx = transient — try fallback
+            if e.response.status_code in (404, 429, 500, 502, 503, 504):
                 last_error = e
                 await asyncio.sleep(0.5)
                 continue
