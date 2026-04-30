@@ -17,18 +17,19 @@ from typing import Optional
 # Hindi unicode range — used for language-mix detection
 HINDI_RE = re.compile(r"[\u0900-\u097F]")
 # Common Hindi words written in Latin script (Hinglish)
+# CRITICAL: Exclude overly-generic English words that create false positives (e.g., "me", "to")
 HINGLISH_TOKENS = {
     "aap", "apke", "apki", "apka", "aapko", "aapki", "aapka", "aapke",
-    "hai", "hain", "ho", "ka", "ki", "ke", "ko", "se", "mein", "me",
-    "kya", "kyu", "kyun", "kyon", "kyu", "kab", "kahan", "kitna", "kitni",
-    "yahan", "wahan", "abhi", "phir", "lekin", "agar", "toh", "to",
+    "hai", "hain", "ho", "ka", "ki", "ke", "ko", "se", "mein",  # removed "me"
+    "kya", "kyu", "kyun", "kyon", "kab", "kahan", "kitna", "kitni",
+    "yahan", "wahan", "abhi", "phir", "lekin", "agar", "toh",  # removed "to"
     "haan", "nahi", "chahiye", "chahta", "chahti", "chalega", "chaliye",
     "namaste", "ji", "shukriya", "dhanyavaad", "bhaiya", "didi",
     "kar", "karo", "karna", "karni", "kiya", "kiye", "rakho", "rakhi",
     "wala", "wali", "waale", "ek", "do", "teen", "char", "paanch",
     "rahe", "rahi", "raha", "tha", "thi", "the", "hoga", "hogi",
     "achha", "accha", "acha", "samajh", "samjha", "samjhi",
-    "ya", "aur", "yaa",
+    "ya", "aur", "yaa", "liye", "ye", "wo",  # Added more specific Hindi words
 }
 
 # Pure-info trigger kinds where a CTA is acceptable but not required
@@ -64,12 +65,12 @@ def _flatten_contexts_text(category: dict, merchant: dict, trigger: dict,
 
 
 def _detect_language_mix(text: str) -> bool:
-    """True if the message uses Hindi (devanagari) or Hinglish tokens."""
+    """True if the message uses Hindi (devanagari) or Hinglish tokens (at least 3 tokens to avoid false positives)."""
     if HINDI_RE.search(text):
         return True
     tokens = re.findall(r"\b[a-z]+\b", text.lower())
     hits = sum(1 for t in tokens if t in HINGLISH_TOKENS)
-    return hits >= 2
+    return hits >= 3  # Increased from 2 to 3 to avoid false positives
 
 
 def _has_cta(body: str) -> bool:
