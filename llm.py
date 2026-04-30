@@ -18,8 +18,8 @@ import httpx
 from typing import Optional
 
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
-GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash-preview-04-17")
-GEMINI_FALLBACK = os.environ.get("GEMINI_FALLBACK", "gemini-2.0-flash-lite")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
+GEMINI_FALLBACK = os.environ.get("GEMINI_FALLBACK", "gemini-1.5-flash")
 GROQ_KEY = os.environ.get("GROQ_API_KEY", "")
 GROQ_MODEL = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
 
