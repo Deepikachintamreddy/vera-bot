@@ -67,6 +67,7 @@ def _persist_contexts():
         # Keys are tuples — JSON needs strings
         serial = {f"{scope}::{cid}": v for (scope, cid), v in contexts.items()}
         CONTEXTS_FILE.write_text(json.dumps(serial), encoding="utf-8")
+        print(f"[persist] wrote {len(contexts)} contexts to disk")
     except Exception as e:
         # Persistence is best-effort; don't block the response on disk failure
         print(f"[persist] write failed: {e}")
@@ -188,6 +189,7 @@ async def push_context(body: ContextBody):
 
     contexts[key] = {"version": body.version, "payload": body.payload}
     # Persist to disk so we survive HF Space worker restarts mid-test
+    print(f"[context] stored {body.scope}:{body.context_id} v{body.version}, now {len(contexts)} total")
     _persist_contexts()
     return {
         "accepted": True,
@@ -334,6 +336,7 @@ async def reply(body: ReplyBody):
 
 @app.post("/v1/teardown")
 async def teardown():
+    print(f"[teardown] wiping {len(contexts)} contexts")
     contexts.clear()
     recent_contacts.clear()
     conv_store.reset()
