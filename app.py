@@ -34,7 +34,7 @@ import state
 TEAM_NAME = os.environ.get("TEAM_NAME", "GrowthGenie")
 TEAM_MEMBERS = [s.strip() for s in os.environ.get(
     "TEAM_MEMBERS", "Deepika Chintamreddy").split(",") if s.strip()]
-CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "deepika@example.com")
+CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "deepikachintamreddy447@gmail.com")
 BOT_VERSION = "1.1.0"
 SUBMITTED_AT = "2026-04-29T00:00:00Z"
 
@@ -139,7 +139,7 @@ async def root():
 
 @app.get("/v1/metadata")
 async def metadata():
-    primary_model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+    primary_model = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash-exp")
     return {
         "team_name": TEAM_NAME,
         "team_members": TEAM_MEMBERS,
