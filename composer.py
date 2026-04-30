@@ -275,7 +275,7 @@ CRITICAL ROUTING:
 OUTPUT JSON SCHEMA (exact keys):
 {
   "body": "<reply body>",
-  "cta": "binary_yes_stop" | "open_ended" | "none",
+  "cta": "open_ended" | "call_action" | "question",
   "rationale": "<one sentence>"
 }
 """

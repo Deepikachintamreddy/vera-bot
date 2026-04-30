@@ -86,7 +86,7 @@ hook on this rubric.
 OUTPUT JSON SCHEMA (exact keys):
 {
   "body": "<the WhatsApp message body>",
-  "cta": "binary_yes_stop" | "open_ended" | "none",
+  "cta": "open_ended" | "call_action" | "question",
   "rationale": "<2 sentences: why this message, what it should achieve>",
   "template_params": ["param1", "param2", ...]   // values that fill {{1}}, {{2}}... in the WA template
 }
