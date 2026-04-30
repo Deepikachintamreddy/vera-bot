@@ -148,9 +148,11 @@ async def compose_many(items: list[dict],
         trg = item["trigger"]
         merchant = item["merchant"]
         sup = trg.get("suppression_key", "")
+        trg_id = trg.get("id", "?")
 
         # 1. Skip already-sent
         if sup and sup in _sent_suppression_keys:
+            print(f"[compose] {trg_id} dropped: suppression_key already sent")
             continue
 
         # 2. Skip expired
@@ -161,6 +163,7 @@ async def compose_many(items: list[dict],
                 exp_clean = exp.replace("Z", "+00:00")
                 exp_ts = datetime.fromisoformat(exp_clean).timestamp()
                 if exp_ts < now_ts:
+                    print(f"[compose] {trg_id} dropped: expired")
                     continue
             except Exception:
                 pass
@@ -172,12 +175,17 @@ async def compose_many(items: list[dict],
         if last_contact and urgency < 4:
             hours_since = (now_ts - last_contact) / 3600.0
             if hours_since < 4:
+                print(f"[compose] {trg_id} dropped: recently contacted")
                 continue
 
+        print(f"[compose] {trg_id} proceeding to compose")
         pending.append(item)
 
     if not pending:
+        print(f"[compose] no triggers passed filters, returning empty")
         return []
+
+    print(f"[compose] {len(pending)} triggers passed filters, composing...")
 
     # 3. Sort by urgency desc, then source (internal before external)
     def _priority_key(it):
@@ -239,6 +247,7 @@ async def compose_many(items: list[dict],
         if sup:
             _sent_suppression_keys.add(sup)
         actions.append(a)
+    print(f"[compose] final actions: {len(actions)} returned")
     return actions
 
 
