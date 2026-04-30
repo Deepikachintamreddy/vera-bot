@@ -218,6 +218,7 @@ def _resolve_category_for_merchant(merchant: dict) -> Optional[dict]:
 @app.post("/v1/tick")
 async def tick(body: TickBody):
     items = []
+    print(f"[tick] triggers={body.available_triggers} keys={list(contexts.keys())}")
     for trg_id in (body.available_triggers or []):
         trg = _get_payload("trigger", trg_id)
         if not trg:
