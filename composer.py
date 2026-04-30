@@ -297,12 +297,8 @@ async def reply_for(conv: state.Conversation, merchant_message: str,
     # --- 1. Hostile detection ---
     if state.is_hostile(merchant_message):
         return {
-            "action": "send",
-            "body": "Got it — I'll stop messaging. Sorry for the bother. If you change "
-                    "your mind, just reply START anytime.",
-            "cta": "none",
-            "rationale": "Merchant signaled hostility; sending a polite final acknowledgment "
-                         "and ending the conversation."
+            "action": "end",
+            "rationale": "Merchant signaled hostility; ending conversation per protocol."
         }
 
     # --- 2. Auto-reply detection ---
