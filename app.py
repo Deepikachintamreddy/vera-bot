@@ -139,7 +139,7 @@ async def root():
 
 @app.get("/v1/metadata")
 async def metadata():
-    primary_model = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash-exp")
+    primary_model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash-preview-04-17")
     return {
         "team_name": TEAM_NAME,
         "team_members": TEAM_MEMBERS,
